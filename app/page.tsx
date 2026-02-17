@@ -555,10 +555,11 @@ export default function LLMJudgePage() {
       onToken: (token) => {
         updateJudge((judge) => ({ ...judge, output: judge.output + token }));
       },
-      onComplete: (winnerModelId, scores, reasoning) => {
+      onComplete: (winnerModelId, scores, reasoning, cleanedOutput) => {
         updateJudge((judge) => ({
           ...judge,
           status: 'complete',
+          output: cleanedOutput,
           winnerModelId,
           scores,
           reasoning,

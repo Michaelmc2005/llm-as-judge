@@ -10,7 +10,7 @@ interface JudgeOptions {
   modelRuns: ModelRun[];
   judgeModel: string;
   onToken: (token: string) => void;
-  onComplete: (winnerModelId: string | null, scores: Record<string, number>, reasoning: string) => void;
+  onComplete: (winnerModelId: string | null, scores: Record<string, number>, reasoning: string, cleanedOutput: string) => void;
   onError: (error: string) => void;
 }
 
@@ -108,7 +108,8 @@ export function useJudge(config: LLMConfig) {
           }
         }
 
-        onComplete(winnerModelId, scores, briefReasoning);
+        const cleanedOutput = fullOutput.replace(/```json[\s\S]*?```/g, '').trim();
+        onComplete(winnerModelId, scores, briefReasoning, cleanedOutput);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Judge inference failed';
         onError(message);
